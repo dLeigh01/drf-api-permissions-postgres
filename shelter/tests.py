@@ -55,3 +55,12 @@ class ShelterTests(APITestCase):
         url = reverse('animal_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_animal_list(self):
+        url = reverse("animal_list")
+        data = {"owner": 1, "name": "spoon", "description": "good for cereal and soup"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        things = Animal.objects.all()
+        self.assertEqual(len(things), 2)
+        self.assertEqual(Animal.objects.get(id=2).name, "spoon")
